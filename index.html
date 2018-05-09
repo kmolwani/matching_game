@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title> Matching Game </title>
+  <meta name="author" content="Kamil Molwani">
+  <style>
+    img {position: absolute;}
+    div {position: absolute; width: 500px; height: 500px;}
+    #rightSide {left: 500px; border-left: 2px solid black}
+    p1 {color: red; border-bottom: 2px solid black}
+  </style>
+</head>
+
+<body onload="generateFaces()">
+
+  <h1> Let's Play a Matching Game </h1>
+  <p1>INSTRUCTION:</p1> <p2>Click on the EXTRA smiling face on the left side</p2>
+  <div id="leftSide"></div>
+  <div id="rightSide"></div>
+
+  <script>
+  var numberOfFaces = 5;
+  var theLeftSide = document.getElementById("leftSide");
+  var theRightSide = document.getElementById("rightSide");
+  var theBody = document.getElementsByTagName("body")[0];
+  var round = 1;
+
+  function generateFaces() {
+    while (theLeftSide.firstChild) {
+    theLeftSide.removeChild(theLeftSide.firstChild);
+  }
+    while (theRightSide.firstChild) {
+    theRightSide.removeChild(theRightSide.firstChild);
+  }
+      for (i = 0; i < numberOfFaces; ++ i) {
+        var smiling_image = document.createElement("img");
+        window.smiling_image = smiling_image;
+        smiling_image.setAttribute("src","http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png");
+        smiling_image.style.top = Math.floor(Math.random() * 401) + "px";
+        smiling_image.style.left = Math.floor(Math.random() * 401) + "px";
+        theLeftSide.appendChild(smiling_image);
+    }
+    rightSideImages=theLeftSide.cloneNode(true);
+    rightSideImages.removeChild(rightSideImages.lastChild);
+    theRightSide.appendChild(rightSideImages);
+
+    theLeftSide.lastChild.onclick = function nextLevel(event) {
+          event.stopPropagation(true);
+          numberOfFaces = numberOfFaces + 5;
+          round +=1;
+          generateFaces();
+          var stage = document.createTextNode("Round " + round);
+          theLeftSide.appendChild(stage);
+        }
+
+        theBody.onclick = function gameOver() {
+          alert("\t\t\t\t"+"You lost on round " +round + "\n\n" + "\t\t\t" + "Hit 'Refresh Game' to start over" + "\t\t\t\t");
+          var game_Over = document.createElement("img");
+          window.game_Over = game_Over;
+          game_Over.setAttribute("src","https://i.pinimg.com/originals/35/02/05/3502059b254cfc8395b955c67574625d.jpg");
+          game_Over.style.top = "250px";
+          game_Over.style.left = "400px";
+          game_Over.style.height = "200px";
+          theBody.appendChild(game_Over);
+          theBody.onclick = null;
+          theLeftSide.lastChild.onclick = null;
+          var button = document.createElement("button");
+          button.innerHTML = "Refresh Game";
+          button.style.top = "500px";
+          button.style.left = "1000px";
+          button.style.width = "100px";
+          button.style.height ="50px";
+          theBody.appendChild(button);
+          button.onclick = function remove(event) {
+            event.stopPropagation(true);
+            theBody.removeChild(game_Over);
+            theBody.removeChild(button);
+            numberOfFaces = 5;
+            round = 1;
+            generateFaces();
+          }
+        }
+  }
+
+generateFaces();
+
+</script>
+</body>
+</html>
